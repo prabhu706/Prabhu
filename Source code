@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Sample patient data (mock dataset)
+data = {
+    'age': [25, 50, 30, 45, 60, 22, 35, 70],
+    'bmi': [22.4, 30.5, 28.1, 32.0, 29.9, 21.5, 26.7, 31.2],
+    'blood_pressure': [120, 140, 130, 150, 160, 110, 135, 155],
+    'has_disease': [0, 1, 0, 1, 1, 0, 0, 1]  # 1 = disease present, 0 = no disease
+}
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+# Features and labels
+X = df[['age', 'bmi', 'blood_pressure']]
+y = df['has_disease']
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Initialize and train model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Evaluate
+accuracy = accuracy_score(y_test, y_pred)
+print("Prediction Accuracy:", accuracy)
+
+# Example new patient data
+new_patient = pd.DataFrame([[40, 27.0, 138]], columns=['age', 'bmi', 'blood_pressure'])
+prediction = model.predict(new_patient)
+print("Disease Prediction (1 = disease, 0 = no disease):", prediction[0])
